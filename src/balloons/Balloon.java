@@ -10,7 +10,7 @@ public class Balloon extends Sprite {
     private final int DIAMETER = 100;
     private final int SPEED = 100;
 
-    private final Color color;
+    private Color color;
 
     private int movementDirection = 1;
 
@@ -20,6 +20,12 @@ public class Balloon extends Sprite {
     public Balloon(double xPos, double yPos, Color color, AbstractSpriteWorld world) {
         super(xPos, yPos, world);
         this.color = color;
+    }
+
+    protected Color randomizeColor() {
+        var c = Color.getHSBColor(BalloonGame.RANDOM.nextFloat(), 1f, 1f);
+        this.color = c;
+        return c;
     }
 
     public boolean contains(Vec2D pos) {
@@ -56,5 +62,10 @@ public class Balloon extends Sprite {
         }
         newPos = this.getY() + movementDirection * deltaTime * SPEED;
         this.setY(newPos);
+    }
+
+    public boolean onDeath(BalloonGame game) {
+        // return true, which signifies that this balloon should be removed
+        return true;
     }
 }

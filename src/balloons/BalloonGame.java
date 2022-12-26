@@ -33,8 +33,19 @@ public class BalloonGame extends SpriteWorld {
     public void resetBalloons() {
         for (int i = 0; i < 3; i++) {
             double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
-            var balloon = new Balloon(xPos,
-                    RANDOM.nextDouble(this.getHeight()), this);
+            int balloonType = RANDOM.nextInt(4);
+            print(balloonType);
+            Balloon balloon;
+            switch (balloonType) {
+                case 3:
+                    balloon = new ToughBalloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    break;
+                case 0:
+                case 1:
+                default:
+                    balloon = new Balloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    break;
+            }
             this.balloons.add(balloon);
             this.addSprite(balloon);
         }
@@ -53,10 +64,16 @@ public class BalloonGame extends SpriteWorld {
         this.removeSprite(dart);
     }
 
+    public void removeBalloon(Balloon balloon) {
+        if (balloon.onDeath(this)) {
+            this.balloons.remove(balloon);
+            this.removeSprite(balloon);
+        }
+    }
+
     @Override
     protected void setupWorld() {
         this.setTitle("Balloon Game");
-        this.setAntiAlias(true);
     }
 
     @Override
@@ -120,8 +137,7 @@ public class BalloonGame extends SpriteWorld {
             removeDart(dart);
         }
         for (var balloon : balloonsToRemove) {
-            this.balloons.remove(balloon);
-            this.removeSprite(balloon);
+            removeBalloon(balloon);
         }
     }
 
