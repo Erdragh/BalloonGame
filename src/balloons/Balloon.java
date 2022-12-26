@@ -2,6 +2,7 @@ package balloons;
 
 import gdi.game.sprite.AbstractSpriteWorld;
 import gdi.game.sprite.Sprite;
+import gdi.util.math.Vec2D;
 
 import java.awt.*;
 
@@ -19,6 +20,11 @@ public class Balloon extends Sprite {
     public Balloon(double xPos, double yPos, Color color, AbstractSpriteWorld world) {
         super(xPos, yPos, world);
         this.color = color;
+    }
+
+    public boolean contains(Vec2D pos) {
+        double x = pos.x, y = pos.y, disX = this.getX() - x, disY = this.getY() - y, disSquared = disX * disX + disY * disY;
+        return disSquared <= DIAMETER * DIAMETER / 4;
     }
 
     @Override

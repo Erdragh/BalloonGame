@@ -1,12 +1,13 @@
 package balloons;
 
 import gdi.game.sprite.Sprite;
+import gdi.util.math.Vec2D;
 
 import java.awt.*;
 
 public class Dart extends Sprite {
 
-    private final double MOVEMENT_SPEED = 600, ROTATION_SPEED = 40;
+    private final double MOVEMENT_SPEED = 600, ROTATION_SPEED = 40, LENGTH = 60;
 
     private double speedX, speedY;
 
@@ -35,10 +36,15 @@ public class Dart extends Sprite {
         this.shoot = shoot;
     }
 
+    public Vec2D getEndPos() {
+        double angleInRadians = Math.toRadians(this.getAngle());
+        return new Vec2D(Math.cos(angleInRadians) * LENGTH + this.getX(), Math.sin(angleInRadians) * LENGTH + this.getY());
+    }
+
     @Override
     protected void renderLocal(Graphics2D g) {
         g.setColor(Color.BLACK);
-        g.drawLine(0, 0, 60, 0);
+        g.drawLine(0, 0, (int)LENGTH, 0);
     }
 
     @Override
@@ -80,13 +86,13 @@ public class Dart extends Sprite {
     private void move(double deltaTime) {
         if (this.getX() < 0 || this.getX() > this.getAbstractSpriteWorld().getWidth() ||
         this.getY() < 0 || this.getY() > this.getAbstractSpriteWorld().getHeight()) {
-            this.getAbstractSpriteWorld().removeSprite(this);
+            ((BalloonGame) this.getAbstractSpriteWorld()).removeDart(this);
             return;
         }
 
         speedY += 490.5 * deltaTime;
         // In case the movement speed of 600 is said to be constant
-        // this will adjust speedX so that the dart still has a speed
+        // this would adjust speedX so that the dart still has a speed
         // of 600
         // speedX = Math.sqrt(MOVEMENT_SPEED * MOVEMENT_SPEED - speedY * speedY);
         this.setAngle(Math.toDegrees(Math.atan(speedY / speedX)));

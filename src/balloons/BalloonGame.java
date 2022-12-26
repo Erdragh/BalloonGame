@@ -2,9 +2,11 @@ package balloons;
 
 import gdi.game.Settings;
 import gdi.game.sprite.SpriteWorld;
+import gdi.util.math.Vec2D;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BalloonGame extends SpriteWorld {
@@ -12,14 +14,12 @@ public class BalloonGame extends SpriteWorld {
     public static final Random RANDOM = new Random();
 
     private Dart activeDart;
+    private ArrayList<Dart> movingDarts = new ArrayList();
+    private ArrayList<Balloon> balloons = new ArrayList();
 
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
-        for (int i = 0; i < 3; i++) {
-            double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
-            this.addSprite(new Balloon(xPos,
-                    RANDOM.nextDouble(this.getHeight()), this));
-        }
+        resetBalloons();
         regenerateDart();
     }
 
@@ -27,9 +27,27 @@ public class BalloonGame extends SpriteWorld {
         this(new Settings());
     }
 
+    public void resetBalloons() {
+        for (int i = 0; i < 3; i++) {
+            double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
+            var balloon = new Balloon(xPos,
+                    RANDOM.nextDouble(this.getHeight()), this);
+            this.balloons.add(balloon);
+            this.addSprite(balloon);
+        }
+    }
+
     public void regenerateDart() {
+        if (this.activeDart != null) {
+            this.movingDarts.add(this.activeDart);
+        }
         this.activeDart = this.activeDart == null ? new Dart(this, 0) : this.activeDart.copy();
         this.addSprite(this.activeDart);
+    }
+
+    public void removeDart(Dart dart) {
+        this.movingDarts.remove(dart);
+        this.removeSprite(dart);
     }
 
     @Override
@@ -62,6 +80,33 @@ public class BalloonGame extends SpriteWorld {
                 break;
             case KeyEvent.VK_SPACE:
                 this.activeDart.setShoot(true);
+                break;
+            case KeyEvent.VK_R:
+                resetBalloons();
+                break;
+        }
+    }
+
+    @Override
+    protected void update(double deltaTime, double time) {
+        super.update(deltaTime, time);
+        ArrayList<Dart> dartsToRemove = new ArrayList();
+        ArrayList<Balloon> balloonsToRemove = new ArrayList();
+        for (var dart : this.movingDarts) {
+            for (var balloon : this.balloons) {
+                Vec2D endPos = dart.getEndPos();
+                if (balloon.contains(endPos)) {
+                    dartsToRemove.add(dart);
+                    balloonsToRemove.add(balloon);
+                }
+            }
+        }
+        for (var dart : dartsToRemove) {
+            removeDart(dart);
+        }
+        for (var balloon : balloonsToRemove) {
+            this.balloons.remove(balloon);
+            this.removeSprite(balloon);
         }
     }
 
@@ -69,5 +114,11 @@ public class BalloonGame extends SpriteWorld {
     protected void renderBackground(Graphics2D g) {
         g.setColor(Color.decode("#BAFFFF"));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
+    public static void print(Object... objects) {
+        for (var obj : objects) {
+            System.out.println(obj + " ");
+        }
     }
 }
