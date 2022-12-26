@@ -11,10 +11,8 @@ public class Balloon extends Sprite {
 
     private final Color color;
 
-    private static Random random = new Random();
-
     public Balloon(double xPos, double yPos, AbstractSpriteWorld world) {
         super(xPos, yPos, world);
-        this.color = Color.getHSBColor(random.nextFloat(), 1f, 1f);
+        this.color = Color.getHSBColor(BalloonGame.RANDOM.nextFloat(), 1f, 1f);
     }
 }
