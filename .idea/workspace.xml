@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="160e5d80-43bb-4770-be6a-e522a32bc49e" name="Changes" comment="Part7 - Adding Dart">
+    <list default="true" id="160e5d80-43bb-4770-be6a-e522a32bc49e" name="Changes" comment="Part8 - Rotating Dart">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/balloons/BalloonGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/balloons/BalloonGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/balloons/Dart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/balloons/Dart.java" afterDir="false" />
@@ -85,7 +85,7 @@
       <workItem from="1672060771117" duration="47000" />
       <workItem from="1672060960444" duration="14000" />
       <workItem from="1672061004012" duration="46000" />
-      <workItem from="1672061101911" duration="1778000" />
+      <workItem from="1672061101911" duration="3934000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1672056064146</created>
@@ -129,7 +129,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672061717874</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Part8 - Rotating Dart">
+      <created>1672062923392</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1672062923392</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +160,7 @@
     <MESSAGE value="Part5 - Drawing Balloons" />
     <MESSAGE value="Part6 - Animating Balloons" />
     <MESSAGE value="Part7 - Adding Dart" />
-    <option name="LAST_COMMIT_MESSAGE" value="Part7 - Adding Dart" />
+    <MESSAGE value="Part8 - Rotating Dart" />
+    <option name="LAST_COMMIT_MESSAGE" value="Part8 - Rotating Dart" />
   </component>
 </project>

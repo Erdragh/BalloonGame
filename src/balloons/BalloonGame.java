@@ -11,7 +11,7 @@ public class BalloonGame extends SpriteWorld {
 
     public static final Random RANDOM = new Random();
 
-    private boolean rotateUp, rotateDown, shoot;
+    private Dart activeDart;
 
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
@@ -20,27 +20,16 @@ public class BalloonGame extends SpriteWorld {
             this.addSprite(new Balloon(xPos,
                     RANDOM.nextDouble(this.getHeight()), this));
         }
-        this.addSprite(new Dart(this));
+        regenerateDart();
     }
 
     public BalloonGame() {
         this(new Settings());
     }
 
-    public boolean shouldRotateUp() {
-        return rotateUp;
-    }
-
-    public boolean shouldRotateDown() {
-        return rotateDown;
-    }
-
-    public boolean shouldShoot() {
-        if (shoot) {
-            shoot = !shoot;
-            return true;
-        }
-        return shoot;
+    public void regenerateDart() {
+        this.activeDart = this.activeDart == null ? new Dart(this, 0) : this.activeDart.copy();
+        this.addSprite(this.activeDart);
     }
 
     @Override
@@ -53,10 +42,10 @@ public class BalloonGame extends SpriteWorld {
         super.keyDown(ke);
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
-                rotateUp = true;
+                this.activeDart.setRotateUp(true);
                 break;
             case KeyEvent.VK_DOWN:
-                rotateDown = true;
+                this.activeDart.setRotateDown(true);
                 break;
         }
     }
@@ -66,11 +55,13 @@ public class BalloonGame extends SpriteWorld {
         super.keyUp(ke);
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
-                rotateUp = false;
+                this.activeDart.setRotateUp(false);
                 break;
             case KeyEvent.VK_DOWN:
-                rotateDown = false;
+                this.activeDart.setRotateDown(false);
                 break;
+            case KeyEvent.VK_SPACE:
+                this.activeDart.setShoot(true);
         }
     }
 
