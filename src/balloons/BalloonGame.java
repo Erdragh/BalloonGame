@@ -22,7 +22,7 @@ public class BalloonGame extends SpriteWorld {
 
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
-        resetBalloons();
+        addBalloons(3);
         regenerateDart();
     }
 
@@ -30,24 +30,30 @@ public class BalloonGame extends SpriteWorld {
         this(new Settings());
     }
 
-    public void resetBalloons() {
-        for (int i = 0; i < 3; i++) {
+    public void addBalloons(int count, int balloonType) {
+        for (int i = 0; i < count; i++) {
             double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
-            int balloonType = RANDOM.nextInt(4);
-            print(balloonType);
             Balloon balloon;
             switch (balloonType) {
-                case 3:
+                case Balloon.TOUGH_BALLOON:
                     balloon = new ToughBalloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
                     break;
-                case 0:
-                case 1:
+                case Balloon.TROJAN_BALLOON:
+                    balloon = new TrojanBalloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    break;
                 default:
                     balloon = new Balloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
                     break;
             }
             this.balloons.add(balloon);
             this.addSprite(balloon);
+        }
+    }
+
+    public void addBalloons(int count) {
+        for (int i = 0; i < count; i++) {
+            int balloonType = RANDOM.nextInt(4);
+            this.addBalloons(1, balloonType);
         }
     }
 
@@ -79,12 +85,6 @@ public class BalloonGame extends SpriteWorld {
     @Override
     protected void keyDown(gdi.game.events.KeyEvent ke) {
         super.keyDown(ke);
-
-        if (balloons.size() < 1) {
-            this.stop();
-            return;
-        }
-
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
                 this.activeDart.setRotateUp(true);
@@ -108,9 +108,6 @@ public class BalloonGame extends SpriteWorld {
             case KeyEvent.VK_SPACE:
                 this.activeDart.setShoot(true);
                 break;
-            case KeyEvent.VK_R:
-                resetBalloons();
-                break;
         }
     }
 
@@ -119,6 +116,7 @@ public class BalloonGame extends SpriteWorld {
         super.update(deltaTime, time);
 
         if (balloons.size() < 1) {
+            this.stop();
             return;
         }
 
@@ -155,26 +153,20 @@ public class BalloonGame extends SpriteWorld {
     }
 
     private void renderWinMessage(Graphics2D g) {
-        String text = "You Won! Good game!";
         g.setColor(Color.black);
         g.setFont(FONT);
+
+        String text = "You Won! Good game!";
         int width = g.getFontMetrics().stringWidth(text);
         int height = g.getFontMetrics().getHeight();
         int baseX = getWidth() / 2 - width / 2;
         int baseY = getHeight() / 2 - height / 2;
+
         g.fillRoundRect(baseX - 20, baseY - 20, width + 40, height + 40, 40, 40);
         g.setColor(Color.RED);
         g.fillRoundRect(baseX - 15, baseY - 15, width + 30, height + 30, 30, 30);
 
         g.setColor(Color.ORANGE);
-        g.drawString(text, baseX, baseY + (height / 2) + (FONT_SIZE / 2));
-
-        text = "Press any key to stop!";
-        width = g.getFontMetrics().stringWidth(text);
-        height = g.getFontMetrics().getHeight();
-        baseX = getWidth() / 2 - width / 2;
-        baseY = getHeight() / 2 - height / 2 + height + 40 + 20;
-        g.setColor(Color.black);
         g.drawString(text, baseX, baseY + (height / 2) + (FONT_SIZE / 2));
     }
 

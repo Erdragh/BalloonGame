@@ -7,6 +7,9 @@ import gdi.util.math.Vec2D;
 import java.awt.*;
 
 public class Balloon extends Sprite {
+
+    public static final int TOUGH_BALLOON = 2, TROJAN_BALLOON = 3, NORMAL_BALLOON = 0;
+
     private final int DIAMETER = 100;
     private final int SPEED = 100;
 
