@@ -4,11 +4,14 @@ import gdi.game.Settings;
 import gdi.game.sprite.SpriteWorld;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class BalloonGame extends SpriteWorld {
 
     public static final Random RANDOM = new Random();
+
+    private boolean rotateUp, rotateDown, shoot;
 
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
@@ -24,9 +27,51 @@ public class BalloonGame extends SpriteWorld {
         this(new Settings());
     }
 
+    public boolean shouldRotateUp() {
+        return rotateUp;
+    }
+
+    public boolean shouldRotateDown() {
+        return rotateDown;
+    }
+
+    public boolean shouldShoot() {
+        if (shoot) {
+            shoot = !shoot;
+            return true;
+        }
+        return shoot;
+    }
+
     @Override
     protected void setupWorld() {
         this.setTitle("Balloon Game");
+    }
+
+    @Override
+    protected void keyDown(gdi.game.events.KeyEvent ke) {
+        super.keyDown(ke);
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                rotateUp = true;
+                break;
+            case KeyEvent.VK_DOWN:
+                rotateDown = true;
+                break;
+        }
+    }
+
+    @Override
+    protected void keyUp(gdi.game.events.KeyEvent ke) {
+        super.keyUp(ke);
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                rotateUp = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                rotateDown = false;
+                break;
+        }
     }
 
     @Override
