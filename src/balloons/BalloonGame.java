@@ -13,10 +13,11 @@ public class BalloonGame extends SpriteWorld {
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
         for (int i = 0; i < 3; i++) {
-            double xPos = this.getWidth() * (1 / 3) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
+            double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
             this.addSprite(new Balloon(xPos,
                     RANDOM.nextDouble(this.getHeight()), this));
         }
+        this.addSprite(new Dart(this));
     }
 
     public BalloonGame() {
