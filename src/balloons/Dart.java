@@ -62,9 +62,9 @@ public class Dart extends Sprite {
                 newAngle = -90;
             }
             this.setAngle(newAngle);
+        } else if (moving) {
+            this.move(deltaTime);
         }
-
-        this.move(deltaTime);
     }
 
     private void shoot(double deltaTime) {
@@ -83,10 +83,15 @@ public class Dart extends Sprite {
             this.getAbstractSpriteWorld().removeSprite(this);
             return;
         }
-        System.out.println(speedX + " " + speedY);
+
+        speedY += 490.5 * deltaTime;
+        // In case the movement speed of 600 is said to be constant
+        // this will adjust speedX so that the dart still has a speed
+        // of 600
+        // speedX = Math.sqrt(MOVEMENT_SPEED * MOVEMENT_SPEED - speedY * speedY);
+        this.setAngle(Math.toDegrees(Math.atan(speedY / speedX)));
         var newX = this.getX() + deltaTime * speedX;
         var newY = this.getY() + deltaTime * speedY;
-        this.setLocation(this.getX() + deltaTime * speedX, this.getY() + deltaTime * speedY);
-
+        this.setLocation(newX, newY);
     }
 }
