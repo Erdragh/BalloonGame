@@ -17,6 +17,9 @@ public class BalloonGame extends SpriteWorld {
     private ArrayList<Dart> movingDarts = new ArrayList();
     private ArrayList<Balloon> balloons = new ArrayList();
 
+    private final int FONT_SIZE = 30;
+    private final Font FONT = new Font("Comic Sans MS", Font.BOLD, FONT_SIZE);
+
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
         resetBalloons();
@@ -53,11 +56,18 @@ public class BalloonGame extends SpriteWorld {
     @Override
     protected void setupWorld() {
         this.setTitle("Balloon Game");
+        this.setAntiAlias(true);
     }
 
     @Override
     protected void keyDown(gdi.game.events.KeyEvent ke) {
         super.keyDown(ke);
+
+        if (balloons.size() < 1) {
+            this.stop();
+            return;
+        }
+
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
                 this.activeDart.setRotateUp(true);
@@ -90,6 +100,11 @@ public class BalloonGame extends SpriteWorld {
     @Override
     protected void update(double deltaTime, double time) {
         super.update(deltaTime, time);
+
+        if (balloons.size() < 1) {
+            return;
+        }
+
         ArrayList<Dart> dartsToRemove = new ArrayList();
         ArrayList<Balloon> balloonsToRemove = new ArrayList();
         for (var dart : this.movingDarts) {
@@ -114,6 +129,37 @@ public class BalloonGame extends SpriteWorld {
     protected void renderBackground(Graphics2D g) {
         g.setColor(Color.decode("#BAFFFF"));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
+    @Override
+    protected void renderForeground(Graphics2D g) {
+        if (this.balloons.size() < 1) {
+            this.renderWinMessage(g);
+        }
+    }
+
+    private void renderWinMessage(Graphics2D g) {
+        String text = "You Won! Good game!";
+        g.setColor(Color.black);
+        g.setFont(FONT);
+        int width = g.getFontMetrics().stringWidth(text);
+        int height = g.getFontMetrics().getHeight();
+        int baseX = getWidth() / 2 - width / 2;
+        int baseY = getHeight() / 2 - height / 2;
+        g.fillRoundRect(baseX - 20, baseY - 20, width + 40, height + 40, 40, 40);
+        g.setColor(Color.RED);
+        g.fillRoundRect(baseX - 15, baseY - 15, width + 30, height + 30, 30, 30);
+
+        g.setColor(Color.ORANGE);
+        g.drawString(text, baseX, baseY + (height / 2) + (FONT_SIZE / 2));
+
+        text = "Press any key to stop!";
+        width = g.getFontMetrics().stringWidth(text);
+        height = g.getFontMetrics().getHeight();
+        baseX = getWidth() / 2 - width / 2;
+        baseY = getHeight() / 2 - height / 2 + height + 40 + 20;
+        g.setColor(Color.black);
+        g.drawString(text, baseX, baseY + (height / 2) + (FONT_SIZE / 2));
     }
 
     public static void print(Object... objects) {
