@@ -4,24 +4,23 @@ import gdi.game.Settings;
 import gdi.game.sprite.SpriteWorld;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class BalloonGame extends SpriteWorld {
-    private ArrayList balloons = new ArrayList<Balloon>();
 
     public static final Random RANDOM = new Random();
 
     public BalloonGame(Settings settings) {
         super(settings, 800, 600);
         for (int i = 0; i < 3; i++) {
-            balloons.add(new Balloon(this.getWidth() * 1 / 3 + RANDOM.nextInt(this.getWidth() * (2 / 3)),
-                    RANDOM.nextInt(this.getHeight()), this));
+            double xPos = this.getWidth() * (1 / 3) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
+            this.addSprite(new Balloon(xPos,
+                    RANDOM.nextDouble(this.getHeight()), this));
         }
     }
 
     public BalloonGame() {
-        super(800, 600);
+        this(new Settings());
     }
 
     @Override
