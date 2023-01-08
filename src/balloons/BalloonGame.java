@@ -61,11 +61,12 @@ public class BalloonGame extends SpriteWorld {
 
     /**
      * This method adds the specified amount of balloons of
-     * a single given type.
+     * a single given type with the given diameter.
      * @param count the amount of balloons added.
      * @param balloonType the type of the balloons added.
+     * @param diameter the diameter of the newly spawned balloons
      */
-    public void addBalloons(int count, int balloonType) {
+    public void addBalloons(int count, int balloonType, int diameter) {
         for (int i = 0; i < count; i++) {
             // get a random position in the valid x-coordinates.
             double xPos = this.getWidth() * (1d / 3d) + RANDOM.nextDouble((this.getWidth() * (2d / 3d)));
@@ -74,13 +75,13 @@ public class BalloonGame extends SpriteWorld {
             // which type of balloon is generated
             switch (balloonType) {
                 case Balloon.TOUGH_BALLOON:
-                    balloon = new ToughBalloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    balloon = new ToughBalloon(xPos, RANDOM.nextDouble(this.getHeight()), diameter, this);
                     break;
                 case Balloon.TROJAN_BALLOON:
-                    balloon = new TrojanBalloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    balloon = new TrojanBalloon(xPos, RANDOM.nextDouble(this.getHeight()), diameter, this);
                     break;
                 default:
-                    balloon = new Balloon(xPos, RANDOM.nextDouble(this.getHeight()), this);
+                    balloon = new Balloon(xPos, RANDOM.nextDouble(this.getHeight()), diameter,this);
                     break;
             }
             // add the balloon to the list of all balloons
@@ -95,7 +96,7 @@ public class BalloonGame extends SpriteWorld {
      * This method adds an amount of random balloons to the game.
      * @param count the amount of balloons added.
      */
-    public void addBalloons(int count) {
+    public void addBalloons(int count, int diameter) {
         for (int i = 0; i < count; i++) {
             // currently, deciding which balloon spawns is rather easy
             // because the only currently in use probabilities are 25%.
@@ -103,8 +104,17 @@ public class BalloonGame extends SpriteWorld {
             // within bound 4, and have the balloon types be integers
             // within that bound.
             int balloonType = RANDOM.nextInt(4);
-            this.addBalloons(1, balloonType);
+            this.addBalloons(1, balloonType, diameter);
         }
+    }
+
+    /**
+     * Adds a random amount of balloons with the default
+     * diameter to the game.
+     * @param count
+     */
+    public void addBalloons(int count) {
+        this.addBalloons(count, Balloon.DEFAULT_DIAMETER);
     }
 
     /**

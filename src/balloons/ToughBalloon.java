@@ -4,8 +4,8 @@ import gdi.game.sprite.AbstractSpriteWorld;
 
 public class ToughBalloon extends Balloon {
     private int health = 2;
-    public ToughBalloon(double xPos, double yPos, AbstractSpriteWorld world) {
-        super(xPos, yPos, world);
+    public ToughBalloon(double xPos, double yPos, int diameter, AbstractSpriteWorld world) {
+        super(xPos, yPos, diameter, world);
     }
 
     @Override

@@ -11,11 +11,8 @@ public class Balloon extends Sprite {
     // the balloon types.
     public static final int TOUGH_BALLOON = 2, TROJAN_BALLOON = 3, NORMAL_BALLOON = 0;
 
-    /**
-     * The diameter of balloons.
-     * This is used both for rendering and collision detection.
-     */
-    private final int DIAMETER = 100;
+    public static final int DEFAULT_DIAMETER = 100;
+
 
     /**
      * The speed at which balloons move up and down the screen.
@@ -33,19 +30,31 @@ public class Balloon extends Sprite {
      * method.
      */
     private int movementDirection = 1;
+    /**
+     * The diameter of balloons.
+     * This is used both for rendering and collision detection.
+     */
+    private int diameter;
+
+    public Balloon(double xPos, double yPos, int diameter, AbstractSpriteWorld world) {
+        // this constructor uses getHSBColor to create a random color with full saturation and brightness.
+        this(xPos, yPos, Color.getHSBColor(BalloonGame.RANDOM.nextFloat(), 1f, 1f), diameter, world);
+    }
+
+    public Balloon(double xPos, double yPos, Color color, int diameter, AbstractSpriteWorld world) {
+        super(xPos, yPos, world);
+        this.diameter = diameter;
+        this.color = color;
+    }
 
     public Balloon(double xPos, double yPos, AbstractSpriteWorld world) {
-        // this constructor uses getHSBColor to create a random color with full saturation and brightness.
-        this(xPos, yPos, Color.getHSBColor(BalloonGame.RANDOM.nextFloat(), 1f, 1f), world);
-    }
-    public Balloon(double xPos, double yPos, Color color, AbstractSpriteWorld world) {
-        super(xPos, yPos, world);
-        this.color = color;
+        this(xPos, yPos, 100, world);
     }
 
     /**
      * This method generates a random color, returns it to the
      * caller and sets it as the balloons color.
+     *
      * @return the randomly generated color.
      */
     protected Color randomizeColor() {
@@ -57,6 +66,7 @@ public class Balloon extends Sprite {
     /**
      * This method checks whether the given position is inside
      * the balloon, which is used in collision detection.
+     *
      * @param pos the position which may be inside the balloon.
      * @return whether the specified position is inside the balloon.
      */
@@ -64,24 +74,25 @@ public class Balloon extends Sprite {
         // I use squared distances, so I don't have to do expensive
         // root calculations.
         double x = pos.x, y = pos.y, disX = this.getX() - x, disY = this.getY() - y, disSquared = disX * disX + disY * disY;
-        return disSquared <= DIAMETER * DIAMETER / 4;
+        return disSquared <= diameter * diameter / 4;
     }
 
     @Override
     protected void renderLocal(Graphics2D g) {
         // set the color to this balloon's color.
         g.setColor(this.color);
+
         // fill the circle that is this balloon.
-        g.fillOval((-this.DIAMETER / 2),
-                (-this.DIAMETER / 2),
-                this.DIAMETER, this.DIAMETER);
+        g.fillOval((-this.diameter / 2),
+                (-this.diameter / 2),
+                this.diameter, this.diameter);
 
         // draw a triangle on the bottom, so the
         // balloon looks more like an actual balloon.
         var triangle = new Polygon();
-        int offset = DIAMETER / 2;
-        triangle.xpoints = new int[] {-10, 0, 10};
-        triangle.ypoints = new int[] {offset + 10, offset + 0, offset + 10};
+        int offset = this.diameter / 2;
+        triangle.xpoints = new int[]{-10, 0, 10};
+        triangle.ypoints = new int[]{offset + 10, offset + 0, offset + 10};
         triangle.npoints = 3;
         g.fillPolygon(triangle);
     }
@@ -97,6 +108,7 @@ public class Balloon extends Sprite {
      * Moves the balloon according to its current direction.
      * The direction might change if the balloon goes outside the
      * window (or rather, the bounds of the current <code>AbstractSpriteWorld</code>).
+     *
      * @param deltaTime
      */
     private void move(double deltaTime) {
