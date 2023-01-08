@@ -9,7 +9,10 @@ public class TrojanBalloon extends Balloon {
 
     @Override
     public boolean onDeath(BalloonGame game) {
+        // add two new normal balloons to the game
         game.addBalloons(2, NORMAL_BALLOON);
+        // return true, so the original balloon is
+        // removed.
         return true;
     }
 }
