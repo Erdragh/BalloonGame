@@ -10,7 +10,6 @@ public class ToughBalloon extends Balloon {
 
     @Override
     public boolean onDeath(BalloonGame game) {
-        BalloonGame.print(health);
         this.randomizeColor();
         return --health < 1;
     }
